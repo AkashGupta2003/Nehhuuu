@@ -19,6 +19,88 @@
   </nav>
 </header>
 
+<!-- ============ MOBILE TOP APP BAR (mobile only) ============ -->
+<header class="mobile-topbar" id="mobile-topbar">
+  <button class="mobile-back-btn" id="mobile-back-btn" aria-label="Back">‹</button>
+  <div class="mobile-topbar-title" id="mobile-topbar-title">Home</div>
+  <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">☰</button>
+</header>
+
+<!-- ============ MOBILE HOME SCREEN (mobile only) ============ -->
+<section class="mobile-screen mobile-home" id="mobile-home">
+  <button class="mobile-menu-fab" id="mobile-menu-fab" aria-label="Menu">☰</button>
+  <div class="mobile-home-hero">
+    <div class="mobile-heart-frame">
+      <svg class="mobile-heart-outline" viewBox="0 0 100 90" aria-hidden="true">
+        <path d="M50 82 C20 60 4 40 4 22 C4 8 15 -1 28 3 C38 6 46 15 50 24 C54 15 62 6 72 3 C85 -1 96 8 96 22 C96 40 80 60 50 82 Z" />
+      </svg>
+      <div class="mobile-avatar-wrap">
+        <div class="hero-animation" aria-hidden="true"></div>
+        <div class="avatar-blob mobile-avatar-blob">
+          <span class="avatar-initial"><%= partner_full_name[0] %></span>
+        </div>
+      </div>
+    </div>
+    <h1 class="mobile-home-title">Hey <%= partner_nickname %> <span class="heart">♥</span></h1>
+    <p class="mobile-home-subtitle">Welcome to your Cute AI <span class="heart">♥</span></p>
+    <p class="mobile-home-caption">A little space, just for you <span class="infinity">∞</span></p>
+  </div>
+
+  <div class="mobile-home-actions">
+    <button class="mobile-home-btn primary" data-mobile-nav="chat">
+      <span class="heart">♥</span> Let's Chat <span class="chevron">›</span>
+    </button>
+    <button class="mobile-home-btn" data-mobile-nav="mcq">
+      <span class="icon">📋</span> Cute MCQs <span class="chevron">›</span>
+    </button>
+    <button class="mobile-home-btn" data-mobile-nav="world">
+      <span class="icon">🖼️</span> Our Little World <span class="chevron">›</span>
+    </button>
+    <button class="mobile-home-btn" data-mobile-nav="notes">
+      <span class="icon">📝</span> Notes for You <span class="chevron">›</span>
+    </button>
+  </div>
+
+  <div class="sticky-note mobile-sticky-note">
+    <p>You make everything better <span class="heart">♥</span></p>
+  </div>
+</section>
+
+<!-- ============ MOBILE MENU SCREEN (mobile only) ============ -->
+<section class="mobile-screen mobile-menu" id="mobile-menu">
+  <div class="mobile-menu-header">
+    <div class="avatar-blob mobile-menu-avatar">
+      <span class="avatar-initial"><%= partner_full_name[0] %></span>
+    </div>
+    <div class="mobile-menu-hero-mini">
+      A happier you,<br />brighter days <span class="heart">♥</span>
+    </div>
+  </div>
+  <div class="mobile-menu-name"><%= partner_full_name %> <span class="heart">♥</span></div>
+
+  <nav class="mobile-menu-list">
+    <button class="mobile-menu-item" data-mobile-nav="chat">
+      <span class="icon">💬</span> Chat with AI <span class="chevron">›</span>
+    </button>
+    <button class="mobile-menu-item" data-mobile-nav="mcq">
+      <span class="icon">📋</span> Cute MCQs <span class="chevron">›</span>
+    </button>
+    <button class="mobile-menu-item" data-mobile-nav="world">
+      <span class="icon">♥</span> Our Little World <span class="chevron">›</span>
+    </button>
+    <button class="mobile-menu-item" data-mobile-nav="notes">
+      <span class="icon">📝</span> Notes for You <span class="chevron">›</span>
+    </button>
+    <button class="mobile-menu-item" data-mobile-nav="settings">
+      <span class="icon">⚙️</span> Settings <span class="chevron">›</span>
+    </button>
+  </nav>
+
+  <div class="sticky-note mobile-signoff-note">
+    <p>Thank you<br />for being you <span class="heart">♥</span></p>
+  </div>
+</section>
+
 <div class="layout">
 
   <!-- ============ LEFT SIDEBAR ============ -->

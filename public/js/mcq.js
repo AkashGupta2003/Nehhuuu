@@ -127,15 +127,26 @@
     loadNewQuestion();
   }
 
-  window.CuteMCQ = { loadNewQuestion, resetScore };
+  function ensureLoaded() {
+    // Called when the mobile MCQ screen is opened — only fetches if nothing
+    // has loaded yet (e.g. the initial page-load fetch failed), since a
+    // question is normally already fetched on DOMContentLoaded.
+    if (!current) loadNewQuestion();
+  }
+
+  window.CuteMCQ = { loadNewQuestion, resetScore, ensureLoaded };
 
   document.addEventListener("DOMContentLoaded", loadNewQuestion);
 
   const chipMcq = document.getElementById("chip-mcq");
   if (chipMcq) {
     chipMcq.addEventListener("click", () => {
-      document.getElementById("view-questions") &&
-        document.querySelector('.side-nav-item[data-nav="questions"]').click();
+      if (window.CuteMobile && window.CuteMobile.isMobileView()) {
+        window.CuteMobile.setScreen("mcq");
+      } else {
+        const mcqCard = document.querySelector(".mcq-card");
+        if (mcqCard) mcqCard.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
     });
   }
 })();

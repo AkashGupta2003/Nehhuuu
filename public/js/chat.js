@@ -105,7 +105,7 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     const nickname = (window.SITE_CONFIG && window.SITE_CONFIG.partnerNickname) || "there";
-    addMessage("ai", `Hii ${nickname}uuu! 💕`, nowLabel());
+    addMessage("ai", `Hii ${nickname}! 💕`, nowLabel());
     addMessage("ai", "How are you today? 🥰");
   });
 })();

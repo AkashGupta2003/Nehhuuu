@@ -13,7 +13,7 @@
     "Tell me your comfort food order.",
   ];
 
-  // ---------------- Navigation ----------------
+  // ---------------- Navigation (desktop sidebar) ----------------
   function switchView(name) {
     document.querySelectorAll(".side-nav-item").forEach((b) =>
       b.classList.toggle("active", b.dataset.nav === name)
@@ -26,6 +26,54 @@
   document.querySelectorAll("[data-nav]").forEach((btn) => {
     btn.addEventListener("click", () => switchView(btn.dataset.nav));
   });
+
+  // ---------------- Mobile screen navigation ----------------
+  // On phones the 3-column desktop layout collapses into one full screen at
+  // a time (home / chat / mcq / world / notes / settings / menu), tracked by
+  // body[data-screen] and driven entirely by CSS media queries in style.css.
+  const MOBILE_BREAKPOINT = 860;
+  const MOBILE_SCREEN_TITLES = {
+    chat: "My Cute AI",
+    questions: "Cute Questions",
+    mcq: "Cute MCQs",
+    world: "Our Little World",
+    notes: "Notes for You",
+    settings: "Settings",
+    menu: (window.SITE_CONFIG && window.SITE_CONFIG.partnerFullName) || "Menu",
+  };
+  const VIEW_SCREENS = ["chat", "questions", "world", "notes", "settings"];
+
+  function isMobileView() {
+    return window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`).matches;
+  }
+
+  function setScreen(name) {
+    document.body.dataset.screen = name;
+    const titleEl = document.getElementById("mobile-topbar-title");
+    if (titleEl) titleEl.textContent = MOBILE_SCREEN_TITLES[name] || "";
+    if (VIEW_SCREENS.includes(name)) {
+      switchView(name);
+    }
+    if (name === "mcq" && window.CuteMCQ) {
+      window.CuteMCQ.ensureLoaded();
+    }
+    window.scrollTo(0, 0);
+  }
+
+  document.querySelectorAll("[data-mobile-nav]").forEach((btn) => {
+    btn.addEventListener("click", () => setScreen(btn.dataset.mobileNav));
+  });
+
+  const mobileBackBtn = document.getElementById("mobile-back-btn");
+  if (mobileBackBtn) mobileBackBtn.addEventListener("click", () => setScreen("home"));
+
+  const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+  if (mobileMenuBtn) mobileMenuBtn.addEventListener("click", () => setScreen("menu"));
+
+  const mobileMenuFab = document.getElementById("mobile-menu-fab");
+  if (mobileMenuFab) mobileMenuFab.addEventListener("click", () => setScreen("menu"));
+
+  window.CuteMobile = { isMobileView, setScreen };
 
   // ---------------- Cute Questions starter grid ----------------
   function renderStarters() {
@@ -168,5 +216,20 @@
     renderStarters();
     renderMemories();
     renderNotes();
+    if (isMobileView() && !document.body.dataset.screen) {
+      setScreen("home");
+    }
+  });
+
+  // If the viewport crosses the mobile breakpoint after load (e.g. rotating
+  // a tablet, or resizing a browser window), make sure a screen is set so
+  // the mobile layout isn't stuck blank.
+  let wasMobile = null;
+  window.addEventListener("resize", () => {
+    const nowMobile = isMobileView();
+    if (nowMobile && !wasMobile && !document.body.dataset.screen) {
+      setScreen("home");
+    }
+    wasMobile = nowMobile;
   });
 })();
