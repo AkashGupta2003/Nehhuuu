@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title><%= site_title %></title>
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-brand"><%= site_title %> <span class="heart">♥</span></div>
+  <div class="topbar-tagline"><%= site_tagline %></div>
+  <nav class="topbar-nav">
+    <button class="topbar-link" data-nav="chat">Home</button>
+    <button class="topbar-link" data-nav="world">Memories</button>
+    <button class="topbar-link" data-nav="questions">Surprises</button>
+    <span class="topbar-heart">♥</span>
+  </nav>
+</header>
+
+<div class="layout">
+
+  <!-- ============ LEFT SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="profile-card">
+      <div class="profile-avatar" aria-hidden="true">
+        <div class="avatar-blob">
+          <span class="avatar-initial"><%= partner_full_name[0] %></span>
+        </div>
+      </div>
+      <div class="profile-name"><%= partner_full_name %> <span class="heart">♥</span></div>
+      <div class="profile-sub">My <%= partner_nickname %> <span class="squirrel">🐿️</span></div>
+    </div>
+
+    <nav class="side-nav">
+      <button class="side-nav-item active" data-nav="chat">
+        <span class="icon">💬</span> Chat with AI
+      </button>
+      <button class="side-nav-item" data-nav="questions">
+        <span class="icon">❓</span> Cute Questions
+      </button>
+      <button class="side-nav-item" data-nav="world">
+        <span class="icon">♥</span> Our Little World
+      </button>
+      <button class="side-nav-item" data-nav="notes">
+        <span class="icon">📝</span> Notes for You
+      </button>
+      <button class="side-nav-item" data-nav="settings">
+        <span class="icon">⚙️</span> Settings
+      </button>
+    </nav>
+
+    <div class="sticky-note">
+      <p>You make everything better <span class="heart">♥</span></p>
+    </div>
+
+    <div class="sidebar-illustration" aria-hidden="true">
+      <div class="floating-cat">
+        <div class="cat-heart">♥</div>
+        <div class="cat-face">(=^･ω･^=)</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ CENTER PANEL ============ -->
+  <main class="center-panel">
+
+    <!-- ---- Chat view ---- -->
+    <section class="view active" id="view-chat">
+      <header class="chat-header">
+        <div class="chat-header-avatar">🤖</div>
+        <div class="chat-header-info">
+          <div class="chat-header-name">My Cute AI <span class="heart">♥</span></div>
+          <div class="chat-header-status"><span class="status-dot"></span> Always here for you <span class="infinity">∞</span></div>
+        </div>
+      </header>
+
+      <div class="chat-messages" id="chat-messages">
+        <!-- messages injected by chat.js -->
+      </div>
+
+      <div class="typing-indicator" id="typing-indicator" hidden>
+        <span></span><span></span><span></span>
+      </div>
+
+      <div class="quick-actions" id="quick-actions">
+        <button class="chip" data-prompt="Tell me something cute">💡 Tell me something cute</button>
+        <button class="chip" data-prompt="Motivate me, I need it today">💖 Motivate me</button>
+        <button class="chip" data-prompt="I'm feeling a little tired today">🥱 I'm tired</button>
+        <button class="chip" data-prompt="Suggest a movie for tonight">🎬 Suggest a movie</button>
+        <button class="chip" data-prompt="Ask me a random fun question">❤️ Random question</button>
+        <button class="chip" id="chip-mcq">🎯 Give me a fun MCQ</button>
+      </div>
+
+      <form class="chat-input-row" id="chat-form" autocomplete="off">
+        <button type="button" class="attach-btn" tabindex="-1" aria-hidden="true">📎</button>
+        <input
+          type="text"
+          id="chat-input"
+          placeholder="Type something, <%= partner_nickname %>..."
+          maxlength="2000"
+        />
+        <button type="submit" class="send-btn" aria-label="Send">➤</button>
+      </form>
+    </section>
+
+    <!-- ---- Cute Questions view ---- -->
+    <section class="view" id="view-questions">
+      <h2 class="view-title">Cute Questions ❓</h2>
+      <p class="view-sub">Tap one to send it straight to your AI — or answer the MCQ on the right for a fresh model-made question every round.</p>
+      <div class="starter-grid" id="starter-grid"></div>
+    </section>
+
+    <!-- ---- Our Little World view ---- -->
+    <section class="view" id="view-world">
+      <h2 class="view-title">Our Little World ♥</h2>
+      <p class="view-sub">A tiny space for memories. Add one below (these stay only for this visit).</p>
+      <form class="memory-form" id="memory-form">
+        <input type="text" id="memory-title" placeholder="Memory title..." maxlength="60" required />
+        <textarea id="memory-note" placeholder="What happened? ✨" maxlength="300" required></textarea>
+        <button type="submit">Add memory ♥</button>
+      </form>
+      <div class="memory-grid" id="memory-grid"></div>
+    </section>
+
+    <!-- ---- Notes view ---- -->
+    <section class="view" id="view-notes">
+      <h2 class="view-title">Notes for You 📝</h2>
+      <p class="view-sub">Little sticky notes, just because.</p>
+      <form class="note-form" id="note-form">
+        <input type="text" id="note-input" placeholder="Write a sweet little note..." maxlength="200" required />
+        <button type="submit">Pin it</button>
+      </form>
+      <div class="notes-board" id="notes-board"></div>
+    </section>
+
+    <!-- ---- Settings view ---- -->
+    <section class="view" id="view-settings">
+      <h2 class="view-title">Settings ⚙️</h2>
+      <div class="settings-block">
+        <label class="settings-label">Accent theme</label>
+        <div class="theme-swatches" id="theme-swatches">
+          <button class="swatch" style="--sw:#e75480" data-theme="rose" aria-label="Rose"></button>
+          <button class="swatch" style="--sw:#c084fc" data-theme="lilac" aria-label="Lilac"></button>
+          <button class="swatch" style="--sw:#fb7185" data-theme="coral" aria-label="Coral"></button>
+          <button class="swatch" style="--sw:#f472b6" data-theme="pink" aria-label="Pink"></button>
+        </div>
+      </div>
+      <div class="settings-block">
+        <label class="settings-label">
+          <input type="checkbox" id="toggle-hearts" checked /> Floating hearts animation
+        </label>
+      </div>
+      <div class="settings-block">
+        <button class="danger-btn" id="reset-chat-btn">Reset chat history</button>
+        <button class="danger-btn" id="reset-mcq-btn">Reset MCQ score</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ RIGHT COLUMN ============ -->
+  <aside class="right-col">
+    <div class="hero-card">
+      <div class="hero-animation" id="hero-animation" aria-hidden="true"></div>
+      <div class="hero-caption">
+        A happier you,<br />brighter days <span class="heart">♥</span>
+      </div>
+    </div>
+
+    <div class="mcq-card">
+      <div class="mcq-header">
+        <div class="mcq-icon">🎁</div>
+        <div>
+          <div class="mcq-title">Cute MCQ for You</div>
+          <div class="mcq-sub">Let's see what you choose ♥</div>
+        </div>
+      </div>
+      <div class="mcq-progress-row">
+        <div class="mcq-progress-bar"><div class="mcq-progress-fill" id="mcq-progress-fill"></div></div>
+        <span id="mcq-progress-label">0/0</span>
+      </div>
+      <div id="mcq-body">
+        <p class="mcq-loading">Loading your first question...</p>
+      </div>
+    </div>
+
+    <div class="quote-card">
+      <p>Good things happen<br />when you smile <span class="heart">♥</span></p>
+    </div>
+  </aside>
+
+</div>
+
+<script>
+  window.SITE_CONFIG = {
+    partnerNickname: <%- JSON.stringify(partner_nickname) %>,
+    partnerFullName: <%- JSON.stringify(partner_full_name) %>,
+    yourName: <%- JSON.stringify(your_name) %>
+  };
+</script>
+<script src="/js/animations.js"></script>
+<script src="/js/chat.js"></script>
+<script src="/js/mcq.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>
