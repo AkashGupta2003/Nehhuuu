@@ -66,9 +66,22 @@ const mailTransport = EMAIL_APP_PASSWORD
   : null;
 if (!mailTransport) {
   console.warn(
-    "EMAIL_APP_PASSWORD is not set — password-reset OTPs will be logged to " +
-      "the console instead of emailed until you add a Gmail app password to .env"
+    "EMAIL_APP_PASSWORD is not set — OTPs will be logged to the console " +
+      "instead of emailed until you add a Gmail app password to .env"
   );
+}
+
+async function sendOtpEmail(subject, otp, devLabel) {
+  if (mailTransport) {
+    await mailTransport.sendMail({
+      from: EMAIL_USER,
+      to: RESET_OTP_EMAIL,
+      subject,
+      text: `Your OTP is ${otp}. It expires in 2 minutes.`,
+    });
+  } else {
+    console.log(`[dev] ${devLabel} OTP: ${otp}`);
+  }
 }
 
 const app = express();
@@ -148,8 +161,9 @@ function requireAuth(req, res, next) {
   res.redirect("/login");
 }
 
-// Single pending password-reset OTP at a time (single-user site).
+// Single pending password-reset / login OTP at a time (single-user site).
 let pendingReset = null; // { username, otp, expiresAt }
+let pendingLoginOtp = null; // { username, otp, expiresAt }
 
 function generateOtp() {
   return String(crypto.randomInt(0, 10000)).padStart(4, "0");
@@ -342,7 +356,7 @@ app.get("/login", (req, res) => {
   });
 });
 
-app.post("/api/auth/login", (req, res) => {
+app.post("/api/auth/login", async (req, res) => {
   const username = String((req.body && req.body.username) || "").trim();
   const password = String((req.body && req.body.password) || "");
   const auth = loadAuth();
@@ -351,7 +365,52 @@ app.post("/api/auth/login", (req, res) => {
     return res.status(401).json({ error: "Username ya password galat hai 🥺 phir try karo" });
   }
 
+  const otp = generateOtp();
+  pendingLoginOtp = { username, otp, expiresAt: Date.now() + OTP_TTL_MS };
+
+  try {
+    await sendOtpEmail(`${SITE_TITLE} — Login OTP`, otp, "Login");
+  } catch (err) {
+    console.error("Failed to send login OTP email:", err.message);
+    return res.status(502).json({ error: "OTP email nahi bhej paye — thodi der me try karo" });
+  }
+
+  res.json({ otpRequired: true });
+});
+
+app.post("/api/auth/verify-login-otp", (req, res) => {
+  const username = String((req.body && req.body.username) || "").trim();
+  const otp = String((req.body && req.body.otp) || "").trim();
+
+  if (!pendingLoginOtp || pendingLoginOtp.username !== username || pendingLoginOtp.otp !== otp) {
+    return res.status(401).json({ error: "OTP galat hai" });
+  }
+  if (Date.now() > pendingLoginOtp.expiresAt) {
+    pendingLoginOtp = null;
+    return res.status(401).json({ error: "OTP expire ho gaya — dubara login karo" });
+  }
+
+  pendingLoginOtp = null;
   req.session.authed = true;
+  res.json({ ok: true });
+});
+
+app.post("/api/auth/resend-login-otp", async (req, res) => {
+  const username = String((req.body && req.body.username) || "").trim();
+  if (!pendingLoginOtp || pendingLoginOtp.username !== username) {
+    return res.status(400).json({ error: "Pehle username aur password se login try karo" });
+  }
+
+  const otp = generateOtp();
+  pendingLoginOtp = { username, otp, expiresAt: Date.now() + OTP_TTL_MS };
+
+  try {
+    await sendOtpEmail(`${SITE_TITLE} — Login OTP`, otp, "Login");
+  } catch (err) {
+    console.error("Failed to send login OTP email:", err.message);
+    return res.status(502).json({ error: "OTP email nahi bhej paye — thodi der me try karo" });
+  }
+
   res.json({ ok: true });
 });
 
@@ -370,20 +429,11 @@ app.post("/api/auth/request-reset-otp", async (req, res) => {
   const otp = generateOtp();
   pendingReset = { username, otp, expiresAt: Date.now() + OTP_TTL_MS };
 
-  if (mailTransport) {
-    try {
-      await mailTransport.sendMail({
-        from: EMAIL_USER,
-        to: RESET_OTP_EMAIL,
-        subject: `${SITE_TITLE} — Password Reset OTP`,
-        text: `Your password reset OTP is ${otp}. It expires in 2 minutes.`,
-      });
-    } catch (err) {
-      console.error("Failed to send reset OTP email:", err.message);
-      return res.status(502).json({ error: "OTP email nahi bhej paye — thodi der me try karo" });
-    }
-  } else {
-    console.log(`[dev] Password reset OTP for ${username}: ${otp}`);
+  try {
+    await sendOtpEmail(`${SITE_TITLE} — Password Reset OTP`, otp, "Password reset");
+  } catch (err) {
+    console.error("Failed to send reset OTP email:", err.message);
+    return res.status(502).json({ error: "OTP email nahi bhej paye — thodi der me try karo" });
   }
 
   res.json({ ok: true });

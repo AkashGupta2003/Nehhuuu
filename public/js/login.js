@@ -1,6 +1,10 @@
 (function () {
   const loginForm = document.getElementById("login-form");
   const loginMsg = document.getElementById("login-msg");
+  const loginStepCredentials = document.getElementById("login-step-credentials");
+  const loginOtpBlock = document.getElementById("login-otp-block");
+  const loginSubmitBtn = document.getElementById("login-submit-btn");
+  const resendLoginOtpBtn = document.getElementById("resend-login-otp-btn");
   const resetForm = document.getElementById("reset-form");
   const resetMsg = document.getElementById("reset-msg");
   const showResetBtn = document.getElementById("show-reset-btn");
@@ -16,13 +20,26 @@
     el.hidden = false;
   }
 
+  let loginStep = "credentials";
+
   function resetToStep1() {
     otpBlock.hidden = true;
     resetForm.reset();
     resetMsg.hidden = true;
   }
 
+  function resetLoginStep() {
+    loginStep = "credentials";
+    loginForm.reset();
+    loginStepCredentials.hidden = false;
+    loginOtpBlock.hidden = true;
+    loginSubmitBtn.textContent = "Login ♥";
+    resendLoginOtpBtn.hidden = true;
+    loginMsg.hidden = true;
+  }
+
   showResetBtn.addEventListener("click", () => {
+    resetLoginStep();
     loginForm.hidden = true;
     showResetBtn.hidden = true;
     resetForm.hidden = false;
@@ -64,20 +81,66 @@
     e.preventDefault();
     loginMsg.hidden = true;
     const username = document.getElementById("login-username").value.trim();
-    const password = document.getElementById("login-password").value;
 
+    if (loginStep === "credentials") {
+      const password = document.getElementById("login-password").value;
+      try {
+        const res = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          showMsg(loginMsg, data.error || "Login nahi ho paya", "error");
+          return;
+        }
+        loginStep = "otp";
+        loginStepCredentials.hidden = true;
+        loginOtpBlock.hidden = false;
+        loginSubmitBtn.textContent = "Verify & Login ♥";
+        resendLoginOtpBtn.hidden = false;
+        showMsg(loginMsg, "OTP bhej diya hai ✉️ — check karo", "success");
+      } catch (err) {
+        showMsg(loginMsg, "Kuch gadbad ho gayi — dubara try karo", "error");
+      }
+      return;
+    }
+
+    // OTP step
+    const otp = document.getElementById("login-otp").value.trim();
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch("/api/auth/verify-login-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, otp }),
       });
       const data = await res.json();
       if (!res.ok) {
-        showMsg(loginMsg, data.error || "Login nahi ho paya", "error");
+        showMsg(loginMsg, data.error || "OTP galat hai", "error");
         return;
       }
       window.location.href = "/";
+    } catch (err) {
+      showMsg(loginMsg, "Kuch gadbad ho gayi — dubara try karo", "error");
+    }
+  });
+
+  resendLoginOtpBtn.addEventListener("click", async () => {
+    loginMsg.hidden = true;
+    const username = document.getElementById("login-username").value.trim();
+    try {
+      const res = await fetch("/api/auth/resend-login-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        showMsg(loginMsg, data.error || "OTP nahi bhej paye", "error");
+        return;
+      }
+      showMsg(loginMsg, "Naya OTP bhej diya hai ✉️", "success");
     } catch (err) {
       showMsg(loginMsg, "Kuch gadbad ho gayi — dubara try karo", "error");
     }

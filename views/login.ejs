@@ -16,15 +16,25 @@
     <p class="auth-sub">Hey <%= partner_nickname %>, ye tumhara apna space hai — pehle login karo</p>
 
     <form class="auth-form" id="login-form" autocomplete="off">
-      <label class="auth-label" for="login-username">Username</label>
-      <input class="auth-input" type="text" id="login-username" name="username" autocomplete="username" required />
+      <div id="login-step-credentials">
+        <label class="auth-label" for="login-username">Username</label>
+        <input class="auth-input" type="text" id="login-username" name="username" autocomplete="username" required />
 
-      <label class="auth-label" for="login-password">Password</label>
-      <input class="auth-input" type="password" id="login-password" name="password" autocomplete="current-password" required />
+        <label class="auth-label" for="login-password">Password</label>
+        <input class="auth-input" type="password" id="login-password" name="password" autocomplete="current-password" required />
+      </div>
+
+      <div class="otp-block" id="login-otp-block" hidden>
+        <p class="auth-reset-note">Login OTP bhej diya hai — 2 minute tak valid hai ⏳</p>
+
+        <label class="auth-label" for="login-otp">OTP</label>
+        <input class="auth-input" type="text" id="login-otp" name="otp" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" />
+      </div>
 
       <div class="auth-msg" id="login-msg" hidden></div>
 
-      <button class="auth-btn" type="submit">Login <span class="heart">♥</span></button>
+      <button class="auth-btn" type="submit" id="login-submit-btn">Login <span class="heart">♥</span></button>
+      <button class="auth-link" id="resend-login-otp-btn" type="button" hidden>Resend OTP</button>
     </form>
 
     <button class="auth-link" id="show-reset-btn" type="button">Password bhool gaye? 🥺</button>
