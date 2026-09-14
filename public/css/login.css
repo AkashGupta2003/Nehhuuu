@@ -38,7 +38,8 @@
   font-size: 0.9rem;
 }
 
-.auth-form {
+.auth-form,
+#login-step-credentials {
   display: flex;
   flex-direction: column;
   gap: 6px;
