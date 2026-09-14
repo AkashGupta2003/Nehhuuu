@@ -1,3 +1,6 @@
 node_modules/
-.env.example
+.env
 npm-debug.log*
+data/
+nehal.jpg
+us-hero.jpg

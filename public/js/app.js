@@ -206,6 +206,14 @@
     resetMcqBtn.addEventListener("click", () => window.CuteMCQ.resetScore());
   }
 
+  const logoutBtn = document.getElementById("logout-btn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      await fetch("/api/auth/logout", { method: "POST" });
+      window.location.href = "/login";
+    });
+  }
+
   function escapeHtml(str) {
     const div = document.createElement("div");
     div.textContent = str;

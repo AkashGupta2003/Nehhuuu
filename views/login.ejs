@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Login · <%= site_title %></title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/login.css" />
+</head>
+<body class="auth-body">
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-heart">♥</div>
+    <h1 class="auth-title"><%= site_title %></h1>
+    <p class="auth-sub">Hey <%= partner_nickname %>, ye tumhara apna space hai — pehle login karo</p>
+
+    <form class="auth-form" id="login-form" autocomplete="off">
+      <label class="auth-label" for="login-username">Username</label>
+      <input class="auth-input" type="text" id="login-username" name="username" autocomplete="username" required />
+
+      <label class="auth-label" for="login-password">Password</label>
+      <input class="auth-input" type="password" id="login-password" name="password" autocomplete="current-password" required />
+
+      <div class="auth-msg" id="login-msg" hidden></div>
+
+      <button class="auth-btn" type="submit">Login <span class="heart">♥</span></button>
+    </form>
+
+    <button class="auth-link" id="show-reset-btn" type="button">Password bhool gaye? 🥺</button>
+
+    <form class="auth-form auth-reset-form" id="reset-form" autocomplete="off" hidden>
+      <p class="auth-reset-note">Pehle username daalo, humein tumhare liye ek OTP bhejna hoga 💌</p>
+
+      <label class="auth-label" for="reset-username">Username</label>
+      <input class="auth-input" type="text" id="reset-username" name="username" autocomplete="username" required />
+
+      <button class="auth-btn secondary" type="button" id="send-otp-btn">Send OTP ✉️</button>
+
+      <div class="otp-block" id="otp-block" hidden>
+        <p class="auth-reset-note">OTP bhej diya hai — 2 minute tak valid hai ⏳</p>
+
+        <label class="auth-label" for="reset-otp">OTP</label>
+        <input class="auth-input" type="text" id="reset-otp" name="otp" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" required />
+
+        <label class="auth-label" for="reset-new">New password</label>
+        <input class="auth-input" type="password" id="reset-new" name="newPassword" autocomplete="new-password" minlength="6" required />
+
+        <label class="auth-label" for="reset-confirm">Confirm new password</label>
+        <input class="auth-input" type="password" id="reset-confirm" name="confirmPassword" autocomplete="new-password" minlength="6" required />
+
+        <button class="auth-btn" type="submit">Update password ♥</button>
+        <button class="auth-link" id="resend-otp-btn" type="button">Resend OTP</button>
+      </div>
+
+      <div class="auth-msg" id="reset-msg" hidden></div>
+
+      <button class="auth-link" id="hide-reset-btn" type="button">Wapas login pe jao</button>
+    </form>
+  </div>
+</div>
+
+<script src="/js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+.auth-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.auth-wrap {
+  width: 100%;
+  max-width: 380px;
+}
+
+.auth-card {
+  background: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32px 28px;
+  text-align: center;
+}
+
+.auth-heart {
+  color: var(--accent);
+  font-size: 2rem;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.auth-title {
+  margin: 0 0 4px;
+  font-size: 1.3rem;
+  color: var(--accent);
+}
+
+.auth-sub {
+  margin: 0 0 22px;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.auth-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-soft);
+  margin-top: 8px;
+}
+
+.auth-input {
+  border: 1px solid var(--accent-soft);
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  color: var(--text);
+  outline: none;
+}
+
+.auth-input:focus {
+  border-color: var(--accent);
+}
+
+.auth-msg {
+  font-size: 0.85rem;
+  padding: 8px 10px;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.auth-msg.error {
+  background: #ffe3ec;
+  color: #b3355a;
+}
+
+.auth-msg.success {
+  background: #e3ffe9;
+  color: #227a44;
+}
+
+.auth-btn {
+  margin-top: 16px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 11px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-btn:hover {
+  filter: brightness(1.05);
+}
+
+.auth-btn.secondary {
+  background: var(--bubble-ai);
+  color: var(--accent);
+}
+
+.auth-link {
+  background: none;
+  border: none;
+  color: var(--text-soft);
+  font-size: 0.85rem;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-top: 16px;
+}
+
+.auth-link:hover {
+  color: var(--accent);
+}
+
+.auth-reset-form {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px dashed var(--accent-soft);
+}
+
+.auth-reset-note {
+  margin: 0 0 4px;
+  font-size: 0.85rem;
+  color: var(--text-soft);
+}
+
+.otp-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--accent-soft);
+}

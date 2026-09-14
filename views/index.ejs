@@ -37,7 +37,11 @@
       <div class="mobile-avatar-wrap">
         <div class="hero-animation" aria-hidden="true"></div>
         <div class="avatar-blob mobile-avatar-blob">
-          <span class="avatar-initial"><%= partner_full_name[0] %></span>
+          <% if (partner_photo) { %>
+            <img class="avatar-photo" src="<%= partner_photo %>" alt="<%= partner_full_name %>" />
+          <% } else { %>
+            <span class="avatar-initial"><%= partner_full_name[0] %></span>
+          <% } %>
         </div>
       </div>
     </div>
@@ -70,7 +74,11 @@
 <section class="mobile-screen mobile-menu" id="mobile-menu">
   <div class="mobile-menu-header">
     <div class="avatar-blob mobile-menu-avatar">
-      <span class="avatar-initial"><%= partner_full_name[0] %></span>
+      <% if (partner_photo) { %>
+        <img class="avatar-photo" src="<%= partner_photo %>" alt="<%= partner_full_name %>" />
+      <% } else { %>
+        <span class="avatar-initial"><%= partner_full_name[0] %></span>
+      <% } %>
     </div>
     <div class="mobile-menu-hero-mini">
       A happier you,<br />brighter days <span class="heart">♥</span>
@@ -108,7 +116,11 @@
     <div class="profile-card">
       <div class="profile-avatar" aria-hidden="true">
         <div class="avatar-blob">
-          <span class="avatar-initial"><%= partner_full_name[0] %></span>
+          <% if (partner_photo) { %>
+            <img class="avatar-photo" src="<%= partner_photo %>" alt="<%= partner_full_name %>" />
+          <% } else { %>
+            <span class="avatar-initial"><%= partner_full_name[0] %></span>
+          <% } %>
         </div>
       </div>
       <div class="profile-name"><%= partner_full_name %> <span class="heart">♥</span></div>
@@ -237,6 +249,7 @@
       <div class="settings-block">
         <button class="danger-btn" id="reset-chat-btn">Reset chat history</button>
         <button class="danger-btn" id="reset-mcq-btn">Reset MCQ score</button>
+        <button class="danger-btn" id="logout-btn">Log out</button>
       </div>
     </section>
 
@@ -244,7 +257,11 @@
 
   <!-- ============ RIGHT COLUMN ============ -->
   <aside class="right-col">
-    <div class="hero-card">
+    <div class="hero-card<%= hero_photo ? " has-photo" : "" %>">
+      <% if (hero_photo) { %>
+        <img class="hero-photo" src="<%= hero_photo %>" alt="" aria-hidden="true" />
+        <div class="hero-photo-overlay" aria-hidden="true"></div>
+      <% } %>
       <div class="hero-animation" id="hero-animation" aria-hidden="true"></div>
       <div class="hero-caption">
         A happier you,<br />brighter days <span class="heart">♥</span>
